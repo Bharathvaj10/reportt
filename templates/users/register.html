@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Register - HealthOrganizer{% endblock %}
+
+{% block content %}
+<div class="card glass animate-fade" style="max-width: 550px; margin: 4rem auto;">
+    <h1 class="text-gradient" style="margin-bottom: 2rem; text-align: center;">Join HealthOrganizer</h1>
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+        <div style="margin-bottom: 1.5rem;">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}
+            <div style="color: var(--danger); font-size: 0.8rem; margin-top: -1rem; margin-bottom: 1rem;">
+                {{ field.errors.0 }}
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem; font-size: 1.1rem;">Create
+            Account</button>
+    </form>
+    <p style="margin-top: 2rem; text-align: center; color: var(--text-muted);">
+        Already have an account? <a href="{% url 'login' %}" class="text-gradient"
+            style="font-weight: 600; text-decoration: none;">Login here</a>
+    </p>
+</div>
+{% endblock %}

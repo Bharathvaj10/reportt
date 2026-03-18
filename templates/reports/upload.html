@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Upload Report - HealthOrganizer{% endblock %}
+
+{% block content %}
+<div class="card glass animate-fade" style="max-width: 800px; margin: 0 auto; padding: 3rem;">
+    <h1 class="text-gradient" style="margin-bottom: 2.5rem; text-align: center;">Upload Medical Report</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 2rem;">
+            <div>
+                <label for="{{ form.title.id_for_label }}">Report Title</label>
+                {{ form.title }}
+            </div>
+            <div>
+                <label for="{{ form.category.id_for_label }}">Category</label>
+                {{ form.category }}
+            </div>
+            <div>
+                <label for="{{ form.doctor_name.id_for_label }}">Doctor Name</label>
+                {{ form.doctor_name }}
+            </div>
+            <div>
+                <label for="{{ form.hospital_name.id_for_label }}">Hospital Name</label>
+                {{ form.hospital_name }}
+            </div>
+            <div>
+                <label for="{{ form.report_date.id_for_label }}">Report Date</label>
+                {{ form.report_date }}
+            </div>
+            <div>
+                <label for="{{ form.file.id_for_label }}">Report File (Image or PDF)</label>
+                <div style="position: relative;">
+                    {{ form.file }}
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary"
+            style="width: 100%; margin-top: 3rem; font-size: 1.1rem; padding: 1.25rem;">
+            Process & Save Report
+        </button>
+    </form>
+</div>
+{% endblock %}

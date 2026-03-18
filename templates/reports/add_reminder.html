@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Reminder - HealthOrganizer{% endblock %}
+
+{% block content %}
+<div class="card glass animate-fade" style="max-width: 550px; margin: 3rem auto;">
+    <h1 class="text-gradient" style="margin-bottom: 2rem; text-align: center;">Set Medication Reminder</h1>
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+        <div style="margin-bottom: 1.5rem;">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}
+            <div style="color: var(--danger); font-size: 0.8rem; margin-top: -1rem; margin-bottom: 1rem;">
+                {{ field.errors.0 }}
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem; font-size: 1.1rem;">Set
+            Reminder</button>
+    </form>
+</div>
+{% endblock %}

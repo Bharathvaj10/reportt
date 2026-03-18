@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - HealthOrganizer{% endblock %}
+
+{% block content %}
+<div class="animate-fade" style="padding: 2rem; text-align: center;">
+    <h1 class="text-gradient">Welcome, {{ user.username }}</h1>
+    <p style="color: var(--text-muted); margin-top: 1rem;">The HealthOrganizer is now running in <strong>Stable
+            Mode</strong>.</p>
+
+    <div class="grid" style="margin-top: 3rem; text-align: left;">
+        <div class="card glass">
+            <h3>Health Profile</h3>
+            <p style="margin-top: 1rem;"><strong>Email:</strong> {{ user.email|default:"Not set" }}</p>
+            <a href="{% url 'emergency_info' %}" class="btn btn-primary"
+                style="margin-top: 1rem; width: 100%;">Emergency Info</a>
+        </div>
+
+        <div class="card glass">
+            <h3>Reminders</h3>
+            <p style="margin-top: 1rem; color: var(--text-muted);">Configure your medication reminders here.</p>
+            <a href="{% url 'add_reminder' %}" class="btn btn-primary" style="margin-top: 1.5rem; width: 100%;">+ Set
+                Reminder</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

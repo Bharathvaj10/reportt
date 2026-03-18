@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}My Medical Reports - HealthOrganizer{% endblock %}
+
+{% block content %}
+<div class="animate-fade">
+    <div class="animate-fade">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem;">
+            <h1 class="text-gradient">My Medical Reports</h1>
+            <a href="{% url 'upload_report' %}" class="btn btn-primary" style="padding: 0.8rem 1.5rem;">+ Upload New
+                Report</a>
+        </div>
+
+        <div class="grid">
+            {% for report in reports %}
+            <div class="card glass" style="display: flex; flex-direction: column;">
+                <div style="margin-bottom: 1.5rem;">
+                    <span
+                        class="badge {% if report.category == 'Blood Test' %}badge-success{% elif report.category == 'Prescription' %}badge-warning{% else %}badge-danger{% endif %}">
+                        {{ report.category }}
+                    </span>
+                </div>
+                <h3 style="margin-bottom: 1rem;">{{ report.title }}</h3>
+                <div style="color: var(--text-muted); font-size: 0.9rem; flex-grow: 1;">
+                    <p style="margin-bottom: 0.5rem;"><strong style="color: var(--text-main);">Doctor:</strong> {{
+                        report.doctor_name|default:"N/A" }}</p>
+                    <p><strong style="color: var(--text-main);">Date:</strong> {{ report.report_date|date:"M d,
+                        Y"|default:"N/A" }}</p>
+                </div>
+                <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+                    <a href="{% url 'report_detail' pk=report.pk %}" class="btn"
+                        style="flex: 1; text-align: center; border: 1px solid var(--border); font-size: 0.9rem;">Details</a>
+                    <a href="{{ report.file.url }}" class="btn" target="_blank"
+                        style="flex: 1; text-align: center; border: 1px solid var(--border); font-size: 0.9rem;">Document</a>
+                </div>
+            </div>
+            {% empty %}
+            <div class="card glass" style="grid-column: 1 / -1; text-align: center; padding: 6rem 2rem;">
+                <h2 style="color: var(--text-muted); margin-bottom: 2rem;">No reports found.</h2>
+                <p style="margin-bottom: 2.5rem; color: var(--text-muted);">Start by uploading your first medical
+                    document!</p>
+                <a href="{% url 'upload_report' %}" class="btn btn-primary"
+                    style="padding: 1rem 2rem; font-size: 1.1rem;">Upload Now</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endblock %}

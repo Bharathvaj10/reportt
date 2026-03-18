@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Login - HealthOrganizer{% endblock %}
+
+{% block content %}
+<div class="card glass animate-fade" style="max-width: 450px; margin: 6rem auto;">
+    <h1 class="text-gradient" style="margin-bottom: 2rem; text-align: center;">Welcome Back</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="username">Username</label>
+        <input type="text" name="username" id="username" placeholder="Enter your username" required>
+
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" placeholder="••••••••" required>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Sign In</button>
+    </form>
+    <p style="margin-top: 2rem; text-align: center; color: var(--text-muted);">
+        Don't have an account? <a href="{% url 'register' %}" class="text-gradient"
+            style="font-weight: 600; text-decoration: none;">Register here</a>
+    </p>
+</div>
+{% endblock %}

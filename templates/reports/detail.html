@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ report.title }} - HealthOrganizer{% endblock %}
+
+{% block content %}
+<div class="animate-fade">
+    <div style="margin-bottom: 3rem; display: flex; justify-content: space-between; align-items: flex-end;">
+        <div>
+            <nav style="margin-bottom: 1.5rem;">
+                <a href="{% url 'report_list' %}" class="text-gradient"
+                    style="font-weight: 600; text-decoration: none;">&larr; Back to Reports</a>
+            </nav>
+            <h1 class="text-gradient">{{ report.title }}</h1>
+            <div style="margin-top: 1rem;">
+                <span
+                    class="badge {% if report.category == 'Blood Test' %}badge-success{% elif report.category == 'Prescription' %}badge-warning{% else %}badge-danger{% endif %}">
+                    {{ report.category }}
+                </span>
+            </div>
+        </div>
+        <a href="{{ report.file.url }}" class="btn btn-primary" target="_blank" style="padding: 0.8rem 1.5rem;">View
+            Original Document</a>
+    </div>
+
+    <div class="grid" style="grid-template-columns: 2fr 1fr;">
+        <div class="card glass">
+            <h3 class="text-gradient">Report Information</h3>
+            <div style="margin-top: 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem;">
+                <div>
+                    <label
+                        style="color: var(--text-muted); font-size: 0.75rem; display: block; text-transform: uppercase; font-weight: 700; margin-bottom: 0.5rem;">Doctor</label>
+                    <p style="font-size: 1.1rem; font-weight: 500;">{{ report.doctor_name|default:"N/A" }}</p>
+                </div>
+                <div>
+                    <label
+                        style="color: var(--text-muted); font-size: 0.75rem; display: block; text-transform: uppercase; font-weight: 700; margin-bottom: 0.5rem;">Hospital</label>
+                    <p style="font-size: 1.1rem; font-weight: 500;">{{ report.hospital_name|default:"N/A" }}</p>
+                </div>
+                <div>
+                    <label
+                        style="color: var(--text-muted); font-size: 0.75rem; display: block; text-transform: uppercase; font-weight: 700; margin-bottom: 0.5rem;">Report
+                        Date</label>
+                    <p style="font-size: 1.1rem; font-weight: 500;">{{ report.report_date|date:"F d, Y"|default:"N/A" }}
+                    </p>
+                </div>
+                <div>
+                    <label
+                        style="color: var(--text-muted); font-size: 0.75rem; display: block; text-transform: uppercase; font-weight: 700; margin-bottom: 0.5rem;">Uploaded
+                        On</label>
+                    <p style="font-size: 1.1rem; font-weight: 500;">{{ report.upload_date|date:"F d, Y" }}</p>
+                </div>
+            </div>
+
+            <div style="margin-top: 3rem; border-top: 1px solid var(--border); padding-top: 2rem;">
+                <h3 class="text-gradient">Extracted Data</h3>
+                <div
+                    style="margin-top: 1.5rem; background: rgba(15, 23, 42, 0.4); padding: 2rem; border-radius: var(--radius); border: 1px solid var(--border);">
+                    {% if report.extracted_text %}
+                    <pre
+                        style="white-space: pre-wrap; font-size: 0.95rem; line-height: 1.8; color: var(--text-main); font-family: 'Inter', sans-serif;">{{ report.extracted_text }}</pre>
+                    {% else %}
+                    <p style="color: var(--text-muted); font-style: italic; text-align: center;">No extracted text
+                        available for this report.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 2rem;">
+            <div class="card glass">
+                <h3 class="text-gradient">Actions</h3>
+                <div style="margin-top: 2rem; display: flex; flex-direction: column; gap: 1rem;">
+                    <button onclick="window.print()" class="btn"
+                        style="border: 1px solid var(--border); text-align: center; width: 100%;">Print Summary</button>
+                    <a href="{% url 'add_reminder' %}" class="btn"
+                        style="border: 1px solid var(--border); text-align: center; width: 100%;">Set Reminder</a>
+                </div>
+            </div>
+
+            <div class="card glass"
+                style="background: rgba(16, 185, 129, 0.05); border-color: rgba(16, 185, 129, 0.2);">
+                <p style="color: var(--secondary); font-size: 0.9rem; font-weight: 500;">Need help? Our AI analysis can
+                    help you understand this report better.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
