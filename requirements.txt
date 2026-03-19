@@ -1,0 +1,6 @@
+Django>=4.2
+setuptools
+asgiref>=3.6.0
+sqlparse>=0.4.4
+tzdata; sys_platform == "win32"
+whitenoise>=6.5.0

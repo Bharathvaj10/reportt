@@ -3,24 +3,138 @@
 {% block title %}Dashboard - HealthOrganizer{% endblock %}
 
 {% block content %}
-<div class="animate-fade" style="padding: 2rem; text-align: center;">
-    <h1 class="text-gradient">Welcome, {{ user.username }}</h1>
-    <p style="color: var(--text-muted); margin-top: 1rem;">The HealthOrganizer is now running in <strong>Stable
-            Mode</strong>.</p>
+<div class="animate-fade">
+    <div style="margin-bottom: 2.5rem;">
+        <h1 class="text-gradient" style="font-size: 2.25rem;">Hello, {{ user.first_name|default:user.username }}</h1>
+        <p style="color: var(--text-muted); font-size: 1.1rem;">Manage your health profile and daily reminders.</p>
+    </div>
 
-    <div class="grid" style="margin-top: 3rem; text-align: left;">
-        <div class="card glass">
-            <h3>Health Profile</h3>
-            <p style="margin-top: 1rem;"><strong>Email:</strong> {{ user.email|default:"Not set" }}</p>
-            <a href="{% url 'emergency_info' %}" class="btn btn-primary"
-                style="margin-top: 1rem; width: 100%;">Emergency Info</a>
+    <!-- About Section -->
+    <div class="card glass"
+        style="margin-bottom: 2rem; background: linear-gradient(135deg, #f0fdfa 0%, #ffffff 100%); border-left: 4px solid var(--primary);">
+        <h3 style="color: var(--primary); margin-bottom: 0.5rem;">About HealthOrganizer</h3>
+        <p style="color: var(--text-main); font-size: 1.05rem; max-width: 800px;">
+            Your personal secure vault for medical history and medication management.
+            <strong>HealthOrganizer</strong> ensures you never miss a dose by delivering precise reminders directly to
+            your email,
+            and keeps your medical reports organized and accessible whenever you need them.
+        </p>
+    </div>
+
+    <!-- Health Highlights & Quick Tips -->
+    <div style="margin-bottom: 3rem; display: flex; flex-direction: column; gap: 1.5rem;">
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <div
+                style="background: #eff6ff; color: #1e40af; padding: 0.75rem 1.25rem; border-radius: 99px; font-size: 0.875rem; font-weight: 600; border: 1px solid #dbeafe;">
+                📅 {{ reminders.count }} Active Reminders
+            </div>
+            <div
+                style="background: #f0fdf4; color: #166534; padding: 0.75rem 1.25rem; border-radius: 99px; font-size: 0.875rem; font-weight: 600; border: 1px solid #dcfce7;">
+                📁 {{ recent_reports.count }} Medical Reports
+            </div>
+            <div
+                style="background: #fefce8; color: #854d0e; padding: 0.75rem 1.25rem; border-radius: 99px; font-size: 0.875rem; font-weight: 600; border: 1px solid #fef9c3;">
+                ✅ Profile Verified
+            </div>
         </div>
 
+        <div
+            style="background: #fffbeb; border: 1px solid #fef3c7; padding: 1.25rem; border-radius: var(--radius); display: flex; align-items: center; gap: 1rem;">
+            <div
+                style="background: #f59e0b; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;">
+                💡
+            </div>
+            <div>
+                <h4 style="color: #92400e; margin-bottom: 0.25rem;">Weekly Health Tip</h4>
+                <p style="color: #b45309; font-size: 0.95rem;">Stay hydrated! Drinking enough water is essential for
+                    your body to function properly and improves your energy levels throughout the day.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid">
+        <!-- Health Profile Card -->
         <div class="card glass">
-            <h3>Reminders</h3>
-            <p style="margin-top: 1rem; color: var(--text-muted);">Configure your medication reminders here.</p>
-            <a href="{% url 'add_reminder' %}" class="btn btn-primary" style="margin-top: 1.5rem; width: 100%;">+ Set
-                Reminder</a>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem;">
+                <h3 style="color: var(--primary);">Health Profile</h3>
+                <span class="badge badge-success">Active</span>
+            </div>
+            <div style="margin-bottom: 1.5rem;">
+                <p style="margin-bottom: 0.5rem;"><strong>Email:</strong> {{ user.email|default:"Not set" }}</p>
+                <p style="margin-bottom: 0.5rem;"><strong>Blood Group:</strong> {{ user.blood_group|default:"Not set" }}
+                </p>
+                <p><strong>Age:</strong> {{ user.age|default:"Not set" }}</p>
+            </div>
+            <a href="{% url 'emergency_info' %}" class="btn"
+                style="width: 100%; border: 1px solid var(--border); background: #f8fafc;">View Emergency Info</a>
+        </div>
+
+        <!-- Medication Reminders Card -->
+        <div class="card glass">
+            <h3 style="margin-bottom: 1.5rem; color: var(--primary);">Medication Reminders</h3>
+            <div style="margin-bottom: 1.5rem;">
+                {% for reminder in reminders %}
+                <div
+                    style="padding: 0.75rem 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <p style="font-weight: 600;">{{ reminder.medicine_name }}</p>
+                        <p style="font-size: 0.825rem; color: var(--text-muted);">{{ reminder.dosage_count }} units • {{
+                            reminder.dosage }}</p>
+                    </div>
+                    <span style="font-weight: 700; color: var(--primary);">{{ reminder.time|time:"H:i" }}</span>
+                </div>
+                {% empty %}
+                <p style="color: var(--text-muted); padding: 1rem 0;">No active reminders set.</p>
+                {% endfor %}
+            </div>
+            <a href="{% url 'add_reminder' %}" class="btn btn-primary" style="width: 100%;">+ Set New Reminder</a>
+        </div>
+
+        <!-- Recent Notifications Card -->
+        <div class="card glass">
+            <h3 style="margin-bottom: 1.5rem; color: var(--primary);">Recent Activity</h3>
+            <div style="margin-bottom: 1rem;">
+                {% for notification in recent_notifications %}
+                <div style="padding: 0.75rem 0; border-bottom: 1px solid var(--border);">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+                        <span class="badge" style="background: #f0fdfa; color: #0d9488; font-size: 0.7rem;">Email
+                            Sent</span>
+                        <span style="font-size: 0.75rem; color: var(--text-muted);">{{ notification.created_at|date:"M
+                            d, H:i" }}</span>
+                    </div>
+                    <p style="font-size: 0.875rem;">{{ notification.message }}</p>
+                </div>
+                {% empty %}
+                <p style="color: var(--text-muted); padding: 1rem 0;">No recent notifications.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Reports Section -->
+    <div style="margin-top: 4rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <h2 style="color: var(--primary);">Medical Reports</h2>
+            <a href="{% url 'report_list' %}"
+                style="color: var(--primary); font-weight: 600; text-decoration: none;">View All &rarr;</a>
+        </div>
+
+        <div class="grid">
+            {% for report in recent_reports %}
+            <div class="card glass" style="padding: 1.5rem;">
+                <span
+                    class="badge {% if report.category == 'Blood Test' %}badge-success{% elif report.category == 'Prescription' %}badge-warning{% else %}badge-danger{% endif %}">
+                    {{ report.category }}
+                </span>
+                <h4 style="margin: 1rem 0 0.5rem 0; font-size: 1.15rem;">{{ report.title }}</h4>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">{{ report.report_date|date:"M d, Y" }}</p>
+            </div>
+            {% empty %}
+            <div class="card glass" style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
+                <p style="color: var(--text-muted);">No reports uploaded yet. <a href="{% url 'upload_report' %}"
+                        style="color: var(--primary); font-weight: 600;">Upload one now</a>.</p>
+            </div>
+            {% endfor %}
         </div>
     </div>
 </div>
